@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WMD Player - A minimalist MP3 player PWA with dark mode design">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>WMD Player</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">WMD Player</h1>
+            <span class="track-counter" id="trackCounter">No tracks loaded</span>
+        </header>
+
+        <!-- Drop Zone / Folder Selection -->
+        <div class="drop-zone" id="dropZone">
+            <div class="drop-zone-content">
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                    <path d="M12 11v6m-3-3l3-3 3 3"/>
+                </svg>
+                <p class="drop-text">Drop folder here or click to select</p>
+                <p class="drop-hint">Select the WMD PLAYLIST folder</p>
+            </div>
+            <input type="file" id="folderInput" webkitdirectory directory multiple accept="audio/*" hidden>
+        </div>
+
+        <!-- Now Playing Section -->
+        <div class="now-playing" id="nowPlaying">
+            <div class="track-info">
+                <div class="track-title" id="trackTitle">Select a folder to start</div>
+                <div class="track-artist" id="trackArtist">—</div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container" id="progressContainer">
+                <span class="time-display" id="currentTime">0:00</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <input type="range" class="progress-input" id="progressInput" min="0" max="100" value="0">
+                </div>
+                <span class="time-display" id="duration">0:00</span>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="control-btn shuffle-btn" id="shuffleBtn" title="Shuffle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
+                    </svg>
+                </button>
+                
+                <button class="control-btn" id="prevBtn" title="Previous">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                    </svg>
+                </button>
+                
+                <button class="control-btn play-btn" id="playBtn" title="Play/Pause">
+                    <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                        <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+                    </svg>
+                </button>
+                
+                <button class="control-btn" id="nextBtn" title="Next">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                    </svg>
+                </button>
+                
+                <div class="volume-control">
+                    <button class="control-btn volume-btn" id="volumeBtn" title="Volume">
+                        <svg class="volume-high" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                        <svg class="volume-muted" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                        </svg>
+                    </button>
+                    <div class="volume-slider-container">
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="75">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Playlist -->
+        <div class="playlist-container" id="playlistContainer">
+            <div class="playlist-header">
+                <h2 class="playlist-title">Playlist</h2>
+                <span class="playlist-count" id="playlistCount"></span>
+            </div>
+            <ul class="playlist" id="playlist">
+                <!-- Tracks will be populated here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Audio Element (hidden) -->
+    <audio id="audioPlayer"></audio>
+
+    <script src="app.js"></script>
+</body>
+</html>
